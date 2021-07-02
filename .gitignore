@@ -1,0 +1,13 @@
+# Ignore files
+.lsp-session-v1
+
+
+# Ignore directories
+auto-save-list/*
+elpa/*
+snippets/*
+transient/*
+config.el
+
+# Ignore hidden directories
+.cache/*
