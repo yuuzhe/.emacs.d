@@ -118,6 +118,13 @@
 (use-package evil-easymotion)
 (evilem-default-keybindings "SPC")
 #+END_SRC
+** Undo-Fu
+#+BEGIN_SRC emacs-lisp
+;; For the evil undo (Emacs version < 28)
+(use-package undo-fu)
+(define-key evil-normal-state-map "u" 'undo-fu-only-undo)
+(define-key evil-normal-state-map "\C-r" 'undo-fu-only-redo)
+#+END_SRC
 * General Programming
 ** Smartparens
 #+BEGIN_SRC emacs-lisp
@@ -502,22 +509,38 @@ If all failed, try to complete the common part with `company-complete-common'"
 * Doom Mode Line
 #+BEGIN_SRC emacs-lisp
 (set-face-attribute 'mode-line nil
-                    :foreground "gray85"
-                    :background "dark slate blue"
-                    :box nil)
+  :foreground "gray85"
+  :background "dark slate blue"
+  :box nil)
 (setcar mode-line-position
-        '(:eval (format "%3d%%" (/ (window-start) 0.01 (point-max)))))
+  '(:eval (format "%3d%%" (/ (window-start) 0.01 (point-max)))))
 	
 (use-package doom-modeline
-  :defer t
-  :hook (after-init . doom-modeline-init))
-(doom-modeline-mode 1)
+  :custom
+  ;; Don't compact font caches during GC. Windows Laggy Issue
+  (inhibit-compacting-font-caches t)
+  (doom-modeline-icon t)
+  (doom-modeline-hud t)
+  (doom-modeline-major-mode-color-icon t)
+  (doom-modeline-height 25)
+  :config
+  (doom-modeline-mode))
 
-;; Display-time
+;; Display column numbers in modeline
+(column-number-mode 1) 
+
+;; Customize face
+(set-face-attribute 'doom-modeline-bar nil
+  :background "#FF5600")
+
+;; Display time
 (setq display-time-day-and-date t)
 (setq display-time-format "%m/%d %a. %H:%M")
 (setq display-time-default-load-average nil)
 (display-time-mode 1)
+
+;; Display battery status
+(display-battery-mode 1)
 #+END_SRC
 * Language
 ** Rust
