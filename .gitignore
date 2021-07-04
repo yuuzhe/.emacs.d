@@ -1,5 +1,8 @@
 # Ignore files
 .lsp-session-v1
+projectile-bookmarks.eld
+projects
+recentf
 
 
 # Ignore directories
