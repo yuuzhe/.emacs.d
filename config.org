@@ -1,51 +1,4 @@
 #+STARTUP: overview
-* Interface Tweaks
-** General
-#+BEGIN_SRC emacs-lisp
-;; Disable something when startup
-(setq inhibit-startup-message t)
-(menu-bar-mode -1)
-(toggle-scroll-bar -1)
-(tool-bar-mode -1)
-
-;; Disable backupfile
-(setq make-backup-files nil)
-
-;; Ask to type yes or no -> y or n
-(fset 'yes-or-no-p 'y-or-n-p)
-
-;; Set F5 to revert-buffer
-(global-set-key (kbd "<f5>") 'revert-buffer)
-
-;; Ido flex-matching
-(setq indo-enable-flex-matching t
-      ido-everywhere t)
-(ido-mode 1)
-
-;; Enable ibuffer
-(defalias  'list-buffers 'ibuffer-other-window)
-
-;; Display time
-(setq display-time-day-and-date t
-      display-time-format "%m/%d %a. %H:%M"
-      display-time-default-load-average nil)
-(display-time-mode 1)
-
-;; Display battery status
-(display-battery-mode 1)
-#+END_SRC
-** Which-key
-#+BEGIN_SRC emacs-lisp
-(use-package which-key
-  :config
-  (which-key-mode))
-#+END_SRC
-** Page-break-lines
-#+BEGIN_SRC emacs-lisp
-(use-package page-break-lines
-  :diminish
-  :init (global-page-break-lines-mode))
-#+END_SRC
 * Package Management
 ** Package Server
 #+BEGIN_SRC emacs-lisp
@@ -117,6 +70,53 @@
     (global-set-key (kbd "C-x l") 'counsel-locate)
     (define-key read-expression-map (kbd "C-r") 'counsel-expression-history)
     ))
+#+END_SRC
+* Interface Tweaks
+** General
+#+BEGIN_SRC emacs-lisp
+;; Disable something when startup
+(setq inhibit-startup-message t)
+(menu-bar-mode -1)
+(toggle-scroll-bar -1)
+(tool-bar-mode -1)
+
+;; Disable backupfile
+(setq make-backup-files nil)
+
+;; Ask to type yes or no -> y or n
+(fset 'yes-or-no-p 'y-or-n-p)
+
+;; Set F5 to revert-buffer
+(global-set-key (kbd "<f5>") 'revert-buffer)
+
+;; Ido flex-matching
+(setq indo-enable-flex-matching t
+      ido-everywhere t)
+(ido-mode 1)
+
+;; Enable ibuffer
+(defalias  'list-buffers 'ibuffer-other-window)
+
+;; Display time
+(setq display-time-day-and-date t
+      display-time-format "%m/%d %a. %H:%M"
+      display-time-default-load-average nil)
+(display-time-mode 1)
+
+;; Display battery status
+(display-battery-mode 1)
+#+END_SRC
+** Which-key
+#+BEGIN_SRC emacs-lisp
+(use-package which-key
+  :config
+  (which-key-mode))
+#+END_SRC
+** Page-break-lines
+#+BEGIN_SRC emacs-lisp
+(use-package page-break-lines
+  :diminish
+  :init (global-page-break-lines-mode))
 #+END_SRC
 * Text Editing
 ** Evil
@@ -247,6 +247,7 @@
 ** Flyspell
 #+BEGIN_SRC emacs-lisp
 ;; Need at least aspell version 0.60.9 to enable --camel-case option
+;; in ispell-extra-args
 (use-package flyspell
   :ensure nil
   :diminish
@@ -256,7 +257,7 @@
   (flyspell-issue-message-flag nil)
   (ispell-program-name "aspell")
   (ispell-extra-args
-   '("--sug-mode=ultra" "--lang=en_US" "--camel-case"))
+   '("--sug-mode=ultra" "--lang=en_US"))
   :config
   (use-package flyspell-correct-ivy
     :after ivy
@@ -480,8 +481,6 @@ If all failed, try to complete the common part with `company-complete-common'"
 ** All-The-Icon
 #+BEGIN_SRC emacs-lisp
 (use-package all-the-icons)
-(unless (member "all-the-icons" (font-family-list))
-    (all-the-icons-install-fonts t))
 #+END_SRC
 ** Ivy-Rich
 #+BEGIN_SRC emacs-lisp
@@ -593,6 +592,35 @@ If all failed, try to complete the common part with `company-complete-common'"
 *** Rustic
 #+BEGIN_SRC emacs-lisp
 (use-package rustic)
+#+END_SRC
+** Python
+#+BEGIN_SRC emacs-lisp
+#+END_SRC
+** C
+*** CC-Mode
+#+BEGIN_SRC emacs-lisp
+(use-package cc-mode
+  :bind (:map c-mode-base-map
+         ("C-c c" . compile))
+  :hook (c-mode-common . (lambda ()
+                            (c-set-style "k&r")
+                            (setq tab-width 4)
+                            (setq c-base-offset 4))))
+#+END_SRC
+*** CCLS
+#+BEGIN_SRC emacs-lisp
+(use-package ccls
+  :custom
+  (ccls-executable "/usr/local/bin/ccls")
+  (ccls-sem-highlight-method 'font-lock)
+  :config
+  :hook ((c-mode c++-mode objc-mode) .
+         (lambda () (require 'ccls) (lsp))))
+#+END_SRC
+*** Company-C-Headers
+#+BEGIN_SRC emacs-lisp
+(use-package company-c-headers)
+(add-to-list 'company-backends 'company-c-headers)
 #+END_SRC
 * Miscellaneous
 ** Restart-Emacs
