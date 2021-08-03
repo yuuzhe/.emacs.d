@@ -8,7 +8,6 @@ recentf
 # Ignore directories
 auto-save-list/*
 elpa/*
-snippets/*
 transient/*
 config.el
 
