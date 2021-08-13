@@ -610,9 +610,9 @@ If all failed, try to complete the common part with `company-complete-common'"
   :bind (:map c-mode-base-map
          ("C-c c" . compile))
   :hook (c-mode-common . (lambda ()
-                            (c-set-style "k&r")
+                            (c-set-style "linux")
                             (setq tab-width 4)
-                            (setq c-base-offset 4))))
+                            (setq c-basic-offset 4))))
 #+END_SRC
 *** CCLS
 #+BEGIN_SRC emacs-lisp
@@ -621,7 +621,7 @@ If all failed, try to complete the common part with `company-complete-common'"
   (ccls-executable "/usr/local/bin/ccls")
   (ccls-sem-highlight-method 'font-lock)
   :config
-  :hook ((c-mode c++-mode objc-mode) .
+  :hook ((c-mode) .
          (lambda () (require 'ccls) (lsp))))
 #+END_SRC
 *** Company-C-Headers
